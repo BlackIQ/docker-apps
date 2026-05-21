@@ -1,0 +1,38 @@
+version: "3"
+
+x-web-common: &web-common
+  image: jmalloc/echo-server:latest
+  restart: always
+  networks:
+    - ha-net
+
+services:
+  haproxy:
+    image: haproxytech/haproxy-alpine:latest
+    container_name: haproxy
+    networks:
+      - ha-net
+    ports:
+      - 5896:5896
+      - 8404:8404
+    volumes:
+      - ./config:/usr/local/etc/haproxy:ro
+
+  web1:
+    <<: *web-common
+    container_name: web1
+  web2:
+    <<: *web-common
+    container_name: web2
+  web3:
+    <<: *web-common
+    container_name: web3
+  web4:
+    <<: *web-common
+    container_name: web4
+  web5:
+    <<: *web-common
+    container_name: web5
+
+networks:
+  ha-net:
