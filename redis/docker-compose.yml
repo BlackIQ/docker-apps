@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: local-redis
+    restart: always
+    ports:
+      - "6397:6379"
+    volumes:
+      - dbl-redis-data:/data
+    networks:
+      - database-network
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  dbl-redis-data:
+
+networks:
+  database-network:
