@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: local-mongo
+    restart: always
+    ports:
+      - "27071:27017"
+    volumes:
+      - dbl-mongo-data:/data/db
+      - dbl-mongo-config:/data/configdb
+    networks:
+      - database-network
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  dbl-mongo-data:
+  dbl-mongo-config:
+
+networks:
+  database-network:
