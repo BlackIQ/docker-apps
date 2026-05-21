@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  redis-master:
+    image: redis:alpine
+    container_name: redis-master
+    networks:
+      - redis-network
+    ports:
+      - "6379:6379"
+
+  redis-replica1:
+    image: redis:alpine
+    container_name: redis-replica1
+    command: redis-server --replicaof redis-master 6379
+    depends_on:
+      - redis-master
+    networks:
+      - redis-network
+
+  redis-replica2:
+    image: redis:alpine
+    container_name: redis-replica2
+    command: redis-server --replicaof redis-master 6379
+    depends_on:
+      - redis-master
+    networks:
+      - redis-network
+
+  redis-replica3:
+    image: redis:alpine
+    container_name: redis-replica3
+    command: redis-server --replicaof redis-master 6379
+    depends_on:
+      - redis-master
+    networks:
+      - redis-network
+
+networks:
+  redis-network:
+    driver: bridge
