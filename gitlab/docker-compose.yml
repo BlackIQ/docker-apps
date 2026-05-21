@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:latest
+    container_name: gitlab
+    restart: always
+    hostname: "gitlab.home.local"
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://gitlab.home.local:6949'
+    ports:
+      - "6949:80"
+      - "8538:443"
+      - "7489:22"
+    volumes:
+      - "/volumes/gitlab/config:/etc/gitlab"
+      - "/volumes/gitlab/logs:/var/log/gitlab"
+      - "/volumes/gitlab/data:/var/opt/gitlab"
+    networks:
+      - gitlab-network
+    shm_size: "256m"
+
+networks:
+  gitlab-network:
+    external: true
