@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  server:
+    image: metabase/metabase
+    container_name: metabase-server
+    restart: always
+    ports:
+      - "4323:3000"
+    networks:
+      - metabase-network
+    volumes:
+      - /dev/urandom:/dev/random:ro
+    environment:
+      - MB_DB_TYPE=postgres
+      - MB_DB_HOST=10.1.1.2
+      - MB_DB_PORT=5342
+      - MB_DB_DBNAME=metabase
+      - MB_DB_USER=postgres
+      - MB_DB_PASS=adminpassword
+
+networks:
+  metabase-network:
+    external: true
