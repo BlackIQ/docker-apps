@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  redis1:
+    image: redis:alpine
+    container_name: redis1
+    networks:
+      - redis-cluster
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis1_data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  redis2:
+    image: redis:alpine
+    container_name: redis2
+    networks:
+      - redis-cluster
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis2_data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  redis3:
+    image: redis:alpine
+    container_name: redis3
+    networks:
+      - redis-cluster
+    ports:
+      - "6381:6379"
+    volumes:
+      - redis3_data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  redis4:
+    image: redis:alpine
+    container_name: redis4
+    networks:
+      - redis-cluster
+    ports:
+      - "6382:6379"
+    volumes:
+      - redis4_data:/data
+    command: redis-server /usr/local/etc/redis/redis.conf --cluster-enabled yes --cluster-config-file nodes.conf --cluster-node-timeout 5000 --appendonly yes
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+networks:
+  redis-cluster:
+    driver: bridge
+
+volumes:
+  redis1_data:
+  redis2_data:
+  redis3_data:
+  redis4_data:
