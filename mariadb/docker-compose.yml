@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: local-mariadb
+    restart: always
+    ports:
+      - "3360:3306"
+    volumes:
+      - dbl-mariadb-data:/var/lib/mysql
+    networks:
+      - database-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mariadb-admin",
+          "ping",
+          "-u",
+          "${MYSQL_USER}",
+          "-p${MYSQL_DATABASE}",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  dbl-mariadb-data:
+
+networks:
+  database-network:
