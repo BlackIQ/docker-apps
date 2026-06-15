@@ -1,0 +1,44 @@
+version: '3.5'
+
+services:
+  zabbix-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: 12420213
+      MYSQL_ROOT_PASSWORD: 12420213
+    volumes:
+      - ./zabbix_db:/var/lib/mysql
+
+  zabbix-server:
+    image: zabbix/zabbix-server-mysql:latest
+    environment:
+      DB_SERVER_HOST: zabbix-db
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: 12420213
+    depends_on:
+      - zabbix-db
+    ports:
+      - "10051:10051"  # Zabbix server port
+
+  zabbix-web:
+    image: zabbix/zabbix-web-nginx-mysql:latest
+    environment:
+      DB_SERVER_HOST: zabbix-db
+      MYSQL_DATABASE: zabbix
+      MYSQL_USER: zabbix
+      MYSQL_PASSWORD: 12420213
+      ZBX_SERVER_HOST: zabbix-server
+    depends_on:
+      - zabbix-server
+    ports:
+      - "8080:8080"  # Web interface
+
+  zabbix-agent:
+    image: zabbix/zabbix-agent:latest
+    environment:
+      ZBX_HOSTNAME: "Zabbix Agent"
+      ZBX_SERVER_HOST: zabbix-server
+    network_mode: "host"
