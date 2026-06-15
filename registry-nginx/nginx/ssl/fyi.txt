@@ -1,0 +1,1 @@
+Add a folder name it as your domain and put your certs here. Alright?

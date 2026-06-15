@@ -1,0 +1,46 @@
+services:
+  registry-api:
+    image: registry:latest
+    container_name: registry-api
+    restart: always
+    # ports:
+    #   - "5555:5000"
+    environment:
+      - REGISTRY_AUTH=htpasswd
+      - REGISTRY_AUTH_HTPASSWD_REALM=Registry Realm
+      - REGISTRY_AUTH_HTPASSWD_PATH=/auth/htpasswd
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+    volumes:
+      - ./auth:/auth
+      - ./images:/var/lib/registry
+    networks:
+      - registry-network
+
+  registry-web:
+    image: joxit/docker-registry-ui:latest
+    container_name: registry-web
+    restart: always
+    # ports:
+    #   - "8888:80"
+    environment:
+      - REGISTRY_TITLE=Private Amirhossein Inc Registry
+      - NGINX_PROXY_PASS_URL=http://registry-api:5000
+      - DELETE_IMAGES=true
+      - SINGLE_REGISTRY=true
+    networks:
+      - registry-network
+
+  registry-webserver:
+    build: ./nginx
+    image: registry-webserver:latest
+    container_name: registry-webserver
+    restart: always
+    ports:
+      - "443:443"
+      - "80:80"
+    networks:
+      - registry-network
+
+networks:
+  registry-network:
+    external: true
