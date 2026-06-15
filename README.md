@@ -67,7 +67,9 @@ Collection of Docker Compose stacks for self-hosted services, databases, monitor
 ├── s3-minio
 ├── wireguard
 ├── wordpress
-└── zabbix
+├── zabbix-002
+├── zabbix-002
+└── zabbix-003
 ```
 
 ## Usage
