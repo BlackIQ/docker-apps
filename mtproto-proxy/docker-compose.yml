@@ -1,0 +1,11 @@
+services:
+  proxy:
+    image: telegrammessenger/proxy:latest
+    container_name: proxy
+    ports:
+      - "443:443"
+    volumes:
+      - ./data:/data
+    environment:
+      SECRET: b7a7a8aa5b0edbe73139759da1dadbc5
+    restart: always

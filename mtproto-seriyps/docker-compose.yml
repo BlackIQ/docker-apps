@@ -1,0 +1,10 @@
+services:
+  proxy:
+    image: seriyps/mtproto-proxy
+    container_name: proxy
+    environment:
+      MTP_PORT: 443
+      MTP_SECRET: bd296d814b6f66dc4d7bc3e6cd9b9fba
+      MTP_TAG: "GET FROM BOT @MTProxybot"
+    restart: always
+    network_mode: host
